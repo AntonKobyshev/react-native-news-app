@@ -1,44 +1,28 @@
 import React, { useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
-import Header from "./components/Header";
-import ListOfItems from "./components/ListOfItems";
-import Form from "./components/Form";
+import { StyleSheet } from "react-native";
+import AppLoading from "expo-app-loading";
+import * as Font from "expo-font";
+import MainStack from "./navigate";
+
+const fonts = () =>
+  Font.loadAsync({
+    "mt-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
+    "mt-light": require("./assets/fonts/Montserrat-Light.ttf"),
+  });
 
 export default function App() {
-  const [listOfItems, setListOfItems] = useState([
-    { text: "Buy milk", key: "1" },
-    { text: "Buy car", key: "2" },
-    { text: "Buy dog", key: "3" },
-    { text: "Buy house", key: "4" },
-  ]);
-
-  const addHandler = (text) => {
-    setListOfItems((list) => [
-      { text: text, key: Math.random().toString(36).substring(7) },
-      ...list,
-    ]);
-  };
-
-  const deleteHandler = (key) => {
-    setListOfItems((list) => list.filter((item) => item.key !== key));
-  };
-
-  return (
-    <View>
-      <Header />
-      <Form addHandler={addHandler} />
-      <View>
-        <FlatList
-          data={listOfItems}
-          renderItem={({ item }) => (
-            <ListOfItems el={item} deleteHandler={deleteHandler} />
-          )}
-        />
-      </View>
-    </View>
-  );
+  const [font, setFont] = useState(false);
+  if (font) {
+    return <MainStack />;
+  } else {
+    return (
+      <AppLoading
+        startAsync={fonts}
+        onFinish={() => setFont(true)}
+        onError={console.warn}
+      />
+    );
+  }
 }
 
-const styles = StyleSheet.create({
-  // Your styles here
-});
+const styles = StyleSheet.create({});
