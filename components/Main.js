@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { gStyle } from "../styles/styles";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
+import Form from "./Form";
 
 export default function Main({ navigation }) {
   const [news, setNews] = useState([
@@ -35,6 +36,14 @@ export default function Main({ navigation }) {
 
   const [modalWindow, setModalWindow] = useState(false);
 
+  const addArticle = (article) => {
+    setNews((list) => {
+      article.key = Math.random().toString();
+      return [article, ...list];
+    });
+    setModalWindow(false);
+  };
+
   return (
     <View style={gStyle.main}>
       <Modal visible={modalWindow}>
@@ -47,6 +56,7 @@ export default function Main({ navigation }) {
         />
         <View style={gStyle.main}>
           <Text style={styles.title}>Add post</Text>
+          <Form addArticle={addArticle} />
         </View>
       </Modal>
       <Ionicons
